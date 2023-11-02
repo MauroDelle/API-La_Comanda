@@ -8,6 +8,4 @@ interface IInterfazAPI
     public static function BorrarUno($request, $response, $args);
     public static function ModificarUno($request, $response, $args);
 }
-
-
 ?>
