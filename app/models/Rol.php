@@ -9,6 +9,3 @@ class rol
     const SOCIO = "socio";
 }
 ?>
-<!-- 
-#bartender , los #cerveceros, los #cocineros, los #mozos y los que
-podemos controlar todo incluso los pagos, que somos cualquiera de los tres #socios del local -->

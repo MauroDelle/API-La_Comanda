@@ -3,7 +3,8 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 
 require_once './models/Empleado.php';
-require_once './Interfaces/IInterfazAPO.php';
+require_once './Interfaces/IInterfazAPI.php';
+
 
 class EmpleadoController extends Empleado implements IInterfazAPI
 {
@@ -16,9 +17,10 @@ class EmpleadoController extends Empleado implements IInterfazAPI
         $fecha = $params['fecha_alta'];
 
         $empleado = new Empleado();
+        $empleado->rol = $rol;
         $empleado->nombre = $nombre;
         $empleado->baja = $baja;
-        $empleado->fecha_alta = $fecha;
+        $empleado->fecha_alta = date('Y-m-d H:i:s');
 
         Empleado::crear($empleado);
         $guardadojson = json_encode(array("mensaje" => "Empleado creado con exito"));

@@ -39,19 +39,32 @@ class Empleado implements Ipersistencia
     public static function crear($user)
     {
         $objDataAccess = DataAccess::getInstance();
-        $query = $objDataAccess->prepareQuery("INSERT INTO Empleados (rol,nombre,baja,fecha_alta,fecha_baja) VALUES
-        (:rol,:nombre,:baja,:fecha_alta,:fecha_baja)");
+        $query = $objDataAccess->prepareQuery("INSERT INTO Empleados (rol,nombre,baja,fecha_alta) VALUES
+        (:rol,:nombre,:baja,:fecha_alta)");
         $query->bindValue(":rol", $user->rol, PDO::PARAM_STR);
         $query->bindValue(":nombre", $user->getNombre(),PDO::PARAM_STR);
-        $query->bindValue(":baja", $user->getBaja());
+        $query->bindValue(":baja", $user->getBaja(), PDO::PARAM_BOOL);
         $query->bindValue(":fecha_alta", $user->getFecha_alta());
         $query->execute();
 
         return $objDataAccess->getLastInsertedId();
     }
 
-    public static function obtenerTodos(){}
-    public static function obtenerUno($user){}
+    public static function obtenerTodos()
+    {
+        $objDataAccess = DataAccess::getInstance();
+        $query = $objDataAccess->prepareQuery("SELECT id, rol, nombre, baja,fecha_alta,fecha_baja");
+    }
+    public static function obtenerUno($empleado)
+    {
+        $objDataAccess = DataAccess::getInstance();
+        $query = $objDataAccess->prepareQuery("SELECT id, rol, nombre,baja,fecha_alta,fecha_baja FROM empleados WHERE empleado = :empleado");
+        $query->bindValue(':empleado',$empleado, PDO::PARAM_STR);
+        $query->execute();
+
+        return $query->fetchObject('Empleado');
+    }
+
     public static function modificar($usuario){}
     public static function borrar($id){}
 
