@@ -36,6 +36,7 @@ class Empleado implements Ipersistencia
 
     #endregion
 
+    #region ABM
     public static function crear($user)
     {
         $objDataAccess = DataAccess::getInstance();
@@ -50,23 +51,54 @@ class Empleado implements Ipersistencia
         return $objDataAccess->getLastInsertedId();
     }
 
-    public static function obtenerTodos()
-    {
+    public static function obtenerTodos(){
         $objDataAccess = DataAccess::getInstance();
-        $query = $objDataAccess->prepareQuery("SELECT id, rol, nombre, baja,fecha_alta,fecha_baja");
+        $query = $objDataAccess->prepareQuery("SELECT id, rol, nombre, baja,fecha_alta,fecha_baja FROM empleados");
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_CLASS, "Empleado");
     }
-    public static function obtenerUno($empleado)
-    {
+    public static function obtenerUno($id){
         $objDataAccess = DataAccess::getInstance();
-        $query = $objDataAccess->prepareQuery("SELECT id, rol, nombre,baja,fecha_alta,fecha_baja FROM empleados WHERE empleado = :empleado");
-        $query->bindValue(':empleado',$empleado, PDO::PARAM_STR);
+        $query = $objDataAccess->prepareQuery("SELECT id, rol, nombre, baja, fecha_alta, fecha_alta FROM empleados WHERE id = :id");
+        $query->bindValue(':id',$id, PDO::PARAM_INT);
         $query->execute();
 
         return $query->fetchObject('Empleado');
     }
 
-    public static function modificar($usuario){}
-    public static function borrar($id){}
+    public static function modificar($empleado)
+    {
+        $objDataAccess = DataAccess::getInstance();
+        $query = $objDataAccess->prepareQuery('UPDATE empleados SET nombre = :nombre, rol = :rol WHERE id = :id AND fecha_baja IS NULL');
+        $query->bindValue(':id', $empleado->id, PDO::PARAM_INT);
+        $query->bindValue(':nombre', $empleado->nombre, PDO::PARAM_STR);
+        $query->bindValue(':rol', $empleado->rol, PDO::PARAM_STR);
+        $query->execute();
+    }
+    public static function borrar($id){
+
+        $objDataAccess = DataAccess::getInstance();
+        $consulta = $objDataAccess->prepareQuery("UPDATE empleados SET fecha_baja = :fecha_baja WHERE id = :id AND fecha_baja IS NULL");
+        $fecha = new DateTime(date("d-m-Y"));
+        $consulta->bindValue(':id', $id, PDO::PARAM_INT);
+        $consulta->bindValue(':fecha_baja', date_format($fecha, 'Y-m-d H:i:s'));
+        $consulta->execute();
+    }
+
+    #endregion
+
+
+    public static function obtenerUnoPorId($id)
+    {
+        $objDataAccess = DataAccess::getInstance(); 
+        $query = $objDataAccess->prepareQuery('SELECT id, rol, nombre FROM empleados WHERE id = :id AND fecha_baja IS NULL');
+        $query->bindValue(':id', $id,PDO::PARAM_STR);
+        var_dump($id);
+        $query->execute();
+
+        return $query->fetchObject('Empleado');
+    }
 
 
 }
