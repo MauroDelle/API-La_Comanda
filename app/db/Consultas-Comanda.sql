@@ -57,3 +57,8 @@ SET time_zone = "+00:00";
     FOREIGN KEY (ID_PRODUCTO) REFERENCES Productos(ID),
     FOREIGN KEY (ID_EMPLEADO) REFERENCES Empleados(ID)
     );
+
+
+    /*-- Agregando Campo fechaBaja a Productos --*/
+    ALTER TABLE Productos
+    ADD fecha_baja DATE DEFAULT NULL;

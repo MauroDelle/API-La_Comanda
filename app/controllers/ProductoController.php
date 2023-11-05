@@ -92,7 +92,23 @@ class ProductoController extends Producto implements IInterfazAPI
 
 
     }
-    public static function BorrarUno($request, $response, $args){}
+    public static function BorrarUno($request, $response, $args)
+    {
+      $id = $args['id'];
+      
+      if(Producto::obtenerUno($id))
+      {
+        Producto::borrar($id);
+        $payload = json_encode(array("mensaje" => "Producto borrado con exito"));
+      }else
+      {
+        $payload = json_encode(array("mensaje" => "ID no coincide con un Producto"));
+      }
+
+      $response->getBody()->write($payload);
+      return $response
+      ->withHeader('Content-Type', 'application/json');
+    }
 }
 
 ?>

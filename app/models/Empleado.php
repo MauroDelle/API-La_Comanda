@@ -40,8 +40,7 @@ class Empleado implements Ipersistencia
     public static function crear($user)
     {
         $objDataAccess = DataAccess::getInstance();
-        $query = $objDataAccess->prepareQuery("INSERT INTO Empleados (rol,nombre,baja,fecha_alta) VALUES
-        (:rol,:nombre,:baja,:fecha_alta)");
+        $query = $objDataAccess->prepareQuery("INSERT INTO Empleados (rol,nombre,baja,fecha_alta) VALUES (:rol,:nombre,:baja,:fecha_alta)");
         $query->bindValue(":rol", $user->rol, PDO::PARAM_STR);
         $query->bindValue(":nombre", $user->getNombre(),PDO::PARAM_STR);
         $query->bindValue(":baja", $user->getBaja(), PDO::PARAM_BOOL);

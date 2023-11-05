@@ -101,8 +101,14 @@ class Producto implements Ipersistencia
         $consulta->bindValue(':id', $producto->id, PDO::PARAM_INT);
         $consulta->execute();
     }
-    public static function borrar($objeto){}
-
+    public static function borrar($id){
+        $objDataAccess = DataAccess::getInstance();
+        $query = $objDataAccess->prepareQuery('UPDATE productos SET fecha_baja = :fecha_baja WHERE id = :id AND fecha_baja IS NULL');
+        $fecha = new DateTime(date("d-m-y"));
+        $query ->bindValue(":id", $id, PDO::PARAM_INT);
+        $query->bindValue(":fecha_baja",date_format($fecha,"Y-m-d H:i:s"));
+        $query->execute();
+    }
 
     public static function obtenerUnoPorId($id)
     {
