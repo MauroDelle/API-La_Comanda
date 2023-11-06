@@ -12,6 +12,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require_once './controllers/EmpleadoController.php';
 require_once './db/DataAccess.php';
 require_once './controllers/ProductoController.php';
+require_once './controllers/MesaController.php';
 
 // Carga el archivo .env con la configuracion de la BD.
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -37,6 +38,14 @@ $app->group('/producto', function (RouteCollectorProxy $group) {
   $group->delete('/{id}', \ProductoController::class . '::BorrarUno');
   $group->get('[/]', \ProductoController::class . '::TraerTodos');
   $group->get('/{producto}', \ProductoController::class . '::TraerUno');
+});
+
+$app->group('/mesa', function (RouteCollectorProxy $group) {
+  $group->post('[/]', \MesaController::class . '::CargarUno');
+  $group->put('/{id}', \MesaController::class . '::ModificarUno');
+  $group->delete('/{id}', \MesaController::class . '::BorrarUno');
+  $group->get('[/]', \MesaController::class . '::TraerTodos');
+  $group->get('/{producto}', \MesaController::class . '::TraerUno');
 });
 
 $app->run();

@@ -13,7 +13,7 @@ class ProductoController extends Producto implements IInterfazAPI
         $precio = $params['precio'];
         $tiempo_estimado = $params['tiempo_estimado'];
 
-        $producto = new Producto(); 
+        $producto = new Producto();
         $producto->sector = $sector;
         $producto->nombre = $nombre;
         $producto->precio = $precio;
