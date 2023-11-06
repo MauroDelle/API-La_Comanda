@@ -51,10 +51,41 @@ class Mesa implements Ipersistencia
 
         return $objDataAccess->getLastInsertedId();
     }
-    public static function obtenerTodos(){}
-    public static function obtenerUno($valor){}
-    public static function modificar($objeto){}
-    public static function borrar($objeto){}
+    public static function obtenerTodos(){
+
+        $objDataAccess = DataAccess::getInstance();
+        $consulta = $objDataAccess->prepareQuery("SELECT id, CODIGO_DE_MESA, estado FROM mesas");
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Mesa');
+    }
+    public static function obtenerUno($id){
+
+        $objDataAccess = DataAccess::getInstance();
+        $consulta = $objDataAccess->prepareQuery("SELECT id, CODIGO_DE_MESA, estado FROM mesas WHERE id = :id");
+        $consulta->bindValue(':id', $id, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Mesa');
+    }
+    public static function modificar($mesa){
+
+        $objDataAccess = DataAccess::getInstance();
+        $consulta = $objDataAccess->prepareQuery("UPDATE mesas SET estado = :estado WHERE id = :id");
+        $consulta->bindValue(':id', $mesa->id, PDO::PARAM_INT);
+        $consulta->bindValue(':estado', $mesa->estado, PDO::PARAM_STR);
+        $consulta->execute();
+
+
+    }
+    public static function borrar($id){
+        $objDataAccess = DataAccess::getInstance();
+        $consulta = $objDataAccess->prepareQuery("UPDATE mesas SET estado = :estado WHERE id = :id");
+        $fecha = new DateTime(date("d-m-Y"));
+        $consulta->bindValue(':id', $id, PDO::PARAM_STR);
+        $consulta->bindValue(':estado', Estado::BAJA, PDO::PARAM_STR);
+        $consulta->execute();
+    }
 
     static function CodigoAleatorio($longitud)
     {
@@ -67,9 +98,6 @@ class Mesa implements Ipersistencia
         }
         return $codigo;
     }
-
-
-
 
 }
 ?>
