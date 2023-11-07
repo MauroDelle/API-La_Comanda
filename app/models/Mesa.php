@@ -5,7 +5,7 @@ require_once './models/EstadoMesa.php';
 class Mesa implements Ipersistencia
 {
     public $id;
-    public $codigoDeMesa;
+    public $CODIGO_DE_MESA;
     public $estado;
 
     #region Constructor por defecto
@@ -18,7 +18,7 @@ class Mesa implements Ipersistencia
     }
 
     public function setCodigoDeMesa($codigoDeMesa) {
-        $this->codigoDeMesa = $codigoDeMesa;
+        $this->CODIGO_DE_MESA = $codigoDeMesa;
     }
 
     public function setEstado($estado) {
@@ -33,7 +33,7 @@ class Mesa implements Ipersistencia
     }
     
     public function getCodigoDeMesa() {
-        return $this->codigoDeMesa;
+        return $this->CODIGO_DE_MESA;
     }
 
     public function getEstado() {

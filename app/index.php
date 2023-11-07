@@ -45,7 +45,6 @@ $app->group('/mesa', function (RouteCollectorProxy $group) {
   $group->put('/{id}', \MesaController::class . '::ModificarUno');
   $group->delete('/{id}', \MesaController::class . '::BorrarUno');
   $group->get('[/]', \MesaController::class . '::TraerTodos');
-  $group->get('/{producto}', \MesaController::class . '::TraerUno');
 });
 
 $app->run();
