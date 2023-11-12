@@ -3,25 +3,35 @@ require_once './models/EstadoMesa.php';
 
 class Pedido implements Ipersistencia
 {
+
+    #region ATRIBUTOS
     public $id;
     public $codigoPedido;
-    public $foto;
+    public $fotoMesa;
     public $idMesa;
     public $idProducto;
     public $nombreCliente;
     public $estado;
     public $tiempoEstimado;
-    public $idEmpleado;
     public $tiempoInicio;
     public $tiempoEntregado;
     public $facturado;
+    public $fechaBaja;
     
+    #endregion
+
     #region CONSTRUCTOR
     public function __construct(){}
 
     #endregion
 
     #region SETTERS
+
+    public function setFechaBaja($fechaBaja)
+    {
+        $this->fechaBaja = $fechaBaja;
+    }
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -31,7 +41,7 @@ class Pedido implements Ipersistencia
     }
     
     public function setFoto($foto) {
-        $this->foto = $foto;
+        $this->fotoMesa = $foto;
     }
     
     public function setIdMesa($idMesa) {
@@ -54,9 +64,9 @@ class Pedido implements Ipersistencia
         $this->tiempoEstimado = $tiempoEstimado;
     }
     
-    public function setIdEmpleado($idEmpleado) {
-        $this->idEmpleado = $idEmpleado;
-    }
+    // public function setIdEmpleado($idEmpleado) {
+    //     $this->idEmpleado = $idEmpleado;
+    // }
     
     public function setTiempoInicio($tiempoInicio) {
         $this->tiempoInicio = $tiempoInicio;
@@ -73,6 +83,12 @@ class Pedido implements Ipersistencia
     #endregion
 
     #region GETTERS
+
+    public function getFechaBaja()
+    {
+        return $this->fechaBaja;
+    }
+
     public function getId() {
         return $this->id;
     }
@@ -82,7 +98,7 @@ class Pedido implements Ipersistencia
     }
     
     public function getFoto() {
-        return $this->foto;
+        return $this->fotoMesa;
     }
     
     public function getIdMesa() {
@@ -105,9 +121,9 @@ class Pedido implements Ipersistencia
         return $this->tiempoEstimado;
     }
     
-    public function getIdEmpleado() {
-        return $this->idEmpleado;
-    }
+    // public function getIdEmpleado() {
+    //     return $this->idEmpleado;
+    // }
     
     public function getTiempoInicio() {
         return $this->tiempoInicio;
@@ -124,11 +140,12 @@ class Pedido implements Ipersistencia
 
     #endregion
 
+    #region CRUD
 
     public static function crear($pedido){
-
+        
         $objDataAccess = DataAccess::getInstance();
-        $query = $objDataAccess->prepareQuery('INSERT INTO pedidos (codigoPedido, foto, idMesa, idProducto, nombreCliente, estado) VALUES (:codigoPedido, :foto, :idMesa, :idProducto, :nombreCliente, :estado)');
+        $query = $objDataAccess->prepareQuery('INSERT INTO pedidos (codigoPedido, fotoMesa, idMesa, idProducto, nombreCliente, estado) VALUES (:codigoPedido, :fotoMesa, :idMesa, :idProducto, :nombreCliente, :estado)');
         $query->bindValue(':codigoPedido', $pedido->codigoPedido, PDO::PARAM_STR);
         $query->bindValue(':fotoMesa', $pedido->fotoMesa, PDO::PARAM_STR);
         $query->bindValue(':idMesa', $pedido->idMesa, PDO::PARAM_INT);
@@ -139,7 +156,7 @@ class Pedido implements Ipersistencia
 
         return $objDataAccess->getLastInsertedId();
     }
-
+    
     public static function obtenerTodos(){
 
         $objDataAccess = DataAccess::getInstance();
@@ -178,6 +195,17 @@ class Pedido implements Ipersistencia
     }
 
     public static function borrar($objeto){}
+    #endregion
+
+    public static function obtenerUltimoCodigo($idMesa)
+    {
+        $objDataAccess = DataAccess::getInstance();
+        $query = $objDataAccess->prepareQuery("SELECT codigoPedido FROM pedidos WHERE idMesa = :idMesa");
+        $query->bindValue(':idMesa', $idMesa, PDO::PARAM_STR);
+        $query->execute();
+
+        return $query->fetchColumn();
+    }
 
 
 

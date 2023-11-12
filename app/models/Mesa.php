@@ -75,8 +75,6 @@ class Mesa implements Ipersistencia
         $consulta->bindValue(':id', $mesa->id, PDO::PARAM_INT);
         $consulta->bindValue(':estado', $mesa->estado, PDO::PARAM_STR);
         $consulta->execute();
-
-
     }
     public static function borrar($id){
         $objDataAccess = DataAccess::getInstance();
