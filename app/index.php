@@ -45,14 +45,11 @@ $app->group('/empleado', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/producto', function (RouteCollectorProxy $group) {
-    // Rutas para manejar productos específicos
-    $group->get('/{producto}', \ProductoController::class . '::TraerUno');
-    $group->put('/{id}', \ProductoController::class . '::ModificarUno');
-    $group->delete('/{id}', \ProductoController::class . '::BorrarUno');
-
-    // Rutas para manejar operaciones generales con productos
-    $group->post('[/]', \ProductoController::class . '::CargarUno');
-    $group->get('[/]', \ProductoController::class . '::TraerTodos');
+  $group->post('[/]', \ProductoController::class . '::CargarUno');
+  $group->put('/{id}', \ProductoController::class . '::ModificarUno');
+  $group->delete('/{id}', \ProductoController::class . '::BorrarUno');
+  $group->get('[/]', \ProductoController::class . '::TraerTodos');
+  $group->get('/{producto}', \ProductoController::class . '::TraerUno');
 });
 
 $app->group('/mesa', function (RouteCollectorProxy $group) {
@@ -68,6 +65,12 @@ $app->group('/pedido', function (RouteCollectorProxy $group) {
   $group->delete('/{id}', \PedidoController::class . '::BorrarUno');
   $group->get('[/]', \PedidoController::class . '::TraerTodos');
 });
+
+// LOG IN 
+$app->group('/login', function (RouteCollectorProxy $group) {
+  $group->post('[/]', \EmpleadoController::class . '::LogIn')->add(\Logger::class . '::ValidarLogin');
+});
+
 
 $app->group('/productoCSV', function (RouteCollectorProxy $group) {
   $group->post('/load', \ProductoController::class . '::Cargar')->add(\Validador::class . '::VerificarArchivo');
@@ -85,3 +88,4 @@ $app->group('/login', function (RouteCollectorProxy $group) {
 });
 
 $app->run();
+?>
