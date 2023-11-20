@@ -35,7 +35,6 @@ $app->addBodyParsingMiddleware();
 #endregion
 
 
-
 $app->group('/empleado', function (RouteCollectorProxy $group) {
   $group->post('[/]', \EmpleadoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio')->add(\Validador::class . '::ValidarNuevoEmpleado');
   $group->put('/{id}', \EmpleadoController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
@@ -66,21 +65,11 @@ $app->group('/pedido', function (RouteCollectorProxy $group) {
   $group->get('[/]', \PedidoController::class . '::TraerTodos');
 });
 
-// LOG IN 
-$app->group('/login', function (RouteCollectorProxy $group) {
-  $group->post('[/]', \EmpleadoController::class . '::LogIn')->add(\Logger::class . '::ValidarLogin');
-});
-
-
 $app->group('/productoCSV', function (RouteCollectorProxy $group) {
-  $group->post('/load', \ProductoController::class . '::Cargar')->add(\Validador::class . '::VerificarArchivo');
+  $group->post('/load', \ProductoController::class . '::Cargar');
   $group->get('/download', \ProductoController::class . '::Descargar');
 });
 
-$app->group('/csv', function (RouteCollectorProxy $group) {
-
-  $group->get('/download[/]', \ProductoController::class . '::Descargar');
-});
 
 // LOG IN 
 $app->group('/login', function (RouteCollectorProxy $group) {

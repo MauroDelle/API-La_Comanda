@@ -110,7 +110,6 @@ class ProductoController extends Producto implements IInterfazAPI
       ->withHeader('Content-Type', 'application/json');
     }
 
-<<<<<<< HEAD
     public static function Descargar($path,$response)
     {
       $path = './models/archivo.csv';  // Reemplaza con la ruta deseada
@@ -132,25 +131,7 @@ class ProductoController extends Producto implements IInterfazAPI
       $response->getBody()->write($payload);
       return $response
         ->withHeader('Content-Type', 'application/json');
-=======
-    public static function Descargar($request, $response, $args)
-    {
-      $productos = Producto::obtenerTodos();
-  
-      $stream = fopen('php://temp', 'w+');
-      foreach ($productos as $p) {
-        fputcsv($stream, get_object_vars($p));
-      }
-  
-      $response = $response->withHeader('Content-Type', 'application/csv');
-      $response = $response->withHeader('Pragma', 'no-cache');
-      $response = $response->withHeader('Expires', '0');
-      $response = $response->withBody(new \Slim\Psr7\Stream($stream));
-      echo 'hola';
-      return $response;
->>>>>>> d64c894d57f89f3fa364985985aa709561387730
     }
-
 
     public static function Cargar($request, $response, $args)
     {
@@ -169,9 +150,11 @@ class ProductoController extends Producto implements IInterfazAPI
           throw new Exception("Fallo en la carga por validacion de datos");
         }
         $producto = new Producto();
-        $producto->sector = $data[0];
-        $producto->nombre = $data[1];
-        $producto->precio = $data[2];
+        $producto->id = $data[0];
+        $producto->sector = $data[1];
+        $producto->nombre = $data[2];
+        $producto->precio = $data[3];
+        $producto->tiempo_estimado = $data[4];
         $productos[] = $producto;
       }
   
@@ -183,9 +166,6 @@ class ProductoController extends Producto implements IInterfazAPI
       return $response
         ->withHeader('Content-Type', 'application/json');
     }
-
-
-
 }
 
 ?>
