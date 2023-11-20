@@ -34,6 +34,13 @@ $app->addBodyParsingMiddleware();
 
 #endregion
 
+#region app->group's
+
+// LOG IN 
+$app->group('/login', function (RouteCollectorProxy $group) {
+  $group->post('[/]', \EmpleadoController::class . '::LogIn')->add(\Logger::class . '::ValidarLogin');
+});
+
 
 $app->group('/empleado', function (RouteCollectorProxy $group) {
   $group->post('[/]', \EmpleadoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio')->add(\Validador::class . '::ValidarNuevoEmpleado');
@@ -44,25 +51,25 @@ $app->group('/empleado', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/producto', function (RouteCollectorProxy $group) {
-  $group->post('[/]', \ProductoController::class . '::CargarUno');
-  $group->put('/{id}', \ProductoController::class . '::ModificarUno');
-  $group->delete('/{id}', \ProductoController::class . '::BorrarUno');
-  $group->get('[/]', \ProductoController::class . '::TraerTodos');
-  $group->get('/{producto}', \ProductoController::class . '::TraerUno');
+  $group->post('[/]', \ProductoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->put('/{id}', \ProductoController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->delete('/{id}', \ProductoController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('[/]', \ProductoController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('/{producto}', \ProductoController::class . '::TraerUno')->add(\Autentificador::class . '::ValidarSocio');
 });
 
 $app->group('/mesa', function (RouteCollectorProxy $group) {
-  $group->post('[/]', \MesaController::class . '::CargarUno');
-  $group->put('/{id}', \MesaController::class . '::ModificarUno');
-  $group->delete('/{id}', \MesaController::class . '::BorrarUno');
-  $group->get('[/]', \MesaController::class . '::TraerTodos');
+  $group->post('[/]', \MesaController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->put('/{id}', \MesaController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->delete('/{id}', \MesaController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('[/]', \MesaController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
 });
 
 $app->group('/pedido', function (RouteCollectorProxy $group) {
-  $group->post('[/]', \PedidoController::class . '::CargarUno');
-  $group->put('/{id}', \PedidoController::class . '::ModificarUno');
-  $group->delete('/{id}', \PedidoController::class . '::BorrarUno');
-  $group->get('[/]', \PedidoController::class . '::TraerTodos');
+  $group->post('[/]', \PedidoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->put('/{id}', \PedidoController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->delete('/{id}', \PedidoController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('[/]', \PedidoController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
 });
 
 $app->group('/productoCSV', function (RouteCollectorProxy $group) {
@@ -70,11 +77,8 @@ $app->group('/productoCSV', function (RouteCollectorProxy $group) {
   $group->get('/download', \ProductoController::class . '::Descargar');
 });
 
-
-// LOG IN 
-$app->group('/login', function (RouteCollectorProxy $group) {
-  $group->post('[/]', \EmpleadoController::class . '::LogIn')->add(\Logger::class . '::ValidarLogin');
-});
+#endregion
 
 $app->run();
+
 ?>

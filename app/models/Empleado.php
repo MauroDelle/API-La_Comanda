@@ -102,7 +102,6 @@ class Empleado implements Ipersistencia
 
     #endregion
 
-
     public static function obtenerUnoPorId($id)
     {
         $objDataAccess = DataAccess::getInstance(); 
@@ -143,7 +142,7 @@ class Empleado implements Ipersistencia
 
     #endregion
 
-
+    
 }
    
 ?>

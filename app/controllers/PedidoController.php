@@ -10,97 +10,44 @@ require_once './models/PedidoProducto.php';
 class PedidoController extends Pedido implements IInterfazAPI
 {
 
-  // public static function CargarUno($request, $response, $args)
-  // {
-  //     $parametros = $request->getParsedBody();
-  //     $uploadedFiles = $request->getUploadedFiles();
-
-  //     $idMesa = $parametros['idMesa'];
-  //     $nombreCliente = $parametros['nombreCliente'];
-  //     // $idProducto = $parametros['idProducto'];
-
-  //     $pedido = new Pedido();
-  //     $pedido->idMesa = $idMesa;
-  //     $pedido->nombreCliente = $nombreCliente;
-  //     $productos = $parametros['productos'];
-  //     // $pedido->idProducto = $idProducto;
-
-  //     foreach($productos as $productoParams)
-  //     {
-  //       $producto = new Producto();
-  //       $producto->id  = $productoParams['idProducto'];
-  //     }
-
-
-  //     // if (isset($uploadedFiles['fotoMesa'])) {
-  //     //   $targetPath = './img/' . date_format(new DateTime(), 'Y-m-d_H-i-s') . '_' . $nombreCliente . '_Mesa_' . $idMesa . '.jpg';
-  //     //   $uploadedFiles['fotoMesa']->moveTo($targetPath);
-  //     //   $pedido->fotoMesa = $targetPath;
-  //     // }
-
-  //     $mesa = Mesa::obtenerUno($idMesa);
-
-  //     if ($mesa->estado == Estado::CERRADA) {
-  //       $pedido->codigoPedido = Mesa::CodigoAleatorio(5);
-  //       $mesa->estado = Estado::ESPERANDO;
-  //       Mesa::modificar($mesa);
-  //     } else {
-  //       $pedido->codigoPedido = Pedido::obtenerUltimoCodigo($idMesa);
-  //     }
-
-  //     Pedido::crear($pedido);
-
-  //     $payload = json_encode(array("mensaje" => "Pedido creado con exito"));
-
-  //     $response->getBody()->write($payload);
-  //     return $response
-  //       ->withHeader('Content-Type', 'application/json');
-  // }
-
-
   public static function CargarUno($request, $response, $args)
   {
-    $parametros = $request->getParsedBody();
-    $uploadedFiles = $request->getUploadedFiles();
+      $parametros = $request->getParsedBody();
+      $uploadedFiles = $request->getUploadedFiles();
 
-    $idMesa = $parametros['idMesa'];
-    $nombreCliente = $parametros['nombreCliente'];
+      $idMesa = $parametros['idMesa'];
+      $idProducto = $parametros['idProducto'];
+      $nombreCliente = $parametros['nombreCliente'];
 
-    $pedido = new Pedido();
-    $pedido->idMesa = $idMesa;
-    $pedido->nombreCliente = $nombreCliente;
-    $productos = $parametros['productos'];
+      $pedido = new Pedido();
+      $pedido->idMesa = $idMesa;
+      $pedido->idProducto = $idProducto;
+      $pedido->nombreCliente = $nombreCliente;
 
-    // Obtener la mesa
-    $mesa = Mesa::obtenerUno($idMesa);
-
-    // Crear el pedido en la tabla Pedidos
-    if ($mesa->estado == Estado::CERRADA) {
-      $pedido->codigoPedido = Mesa::CodigoAleatorio(5);
-      $mesa->estado = Estado::ESPERANDO;
-      Mesa::modificar($mesa);
-    } else {
-      $pedido->codigoPedido = Pedido::obtenerUltimoCodigo($idMesa);
+    if (isset($uploadedFiles['fotoMesa'])) {
+      $targetPath = './img/' . date_format(new DateTime(), 'Y-m-d_H-i-s') . '_' . $nombreCliente . '_Mesa_' . $idMesa . '.jpg';
+      $uploadedFiles['fotoMesa']->moveTo($targetPath);
+      $pedido->fotoMesa = $targetPath;
     }
 
 
-    // Crear los registros en la tabla PedidoProducto
-    foreach ($productos as $productoParams) {
-      $producto = new PedidoProducto();
-      $producto->codPedido = $pedido->codigoPedido; // Usar el código del pedido
-      $producto->idProducto = $productoParams['idProducto'];
-      $producto->tiempoEstimado = $productoParams['tiempoEstimado'];
-      $producto->estado = $productoParams['estado'];
-      $producto->idEmpleado = $productoParams['idEmpleado'];
+      $mesa = Mesa::obtenerUno($idMesa);
 
-      // Persistir el producto en la base de datos
-      PedidoProducto::crear($producto);
-    }
+      if ($mesa->estado == Estado::CERRADA) {
+        $pedido->codigoPedido = Mesa::CodigoAleatorio(5);
+        $mesa->estado = Estado::ESPERANDO;
+        Mesa::modificar($mesa);
+      } else {
+        $pedido->codigoPedido = Pedido::obtenerUltimoCodigo($idMesa);
+      }
 
-    $payload = json_encode(array("mensaje" => "Pedido creado con éxito"));
+      Pedido::crear($pedido);
 
-    $response->getBody()->write($payload);
-    return $response->withHeader('Content-Type', 'application/json');
+      $payload = json_encode(array("mensaje" => "Pedido creado con exito"));
+
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
   }
 
 

@@ -46,7 +46,6 @@ class ProductoController extends Producto implements IInterfazAPI
         return $response
           ->withHeader('Content-Type', 'application/json');
     }
-    
     public static function ModificarUno($request, $response, $args){
 
         $id = $args['id'];
@@ -109,7 +108,6 @@ class ProductoController extends Producto implements IInterfazAPI
       return $response
       ->withHeader('Content-Type', 'application/json');
     }
-
     public static function Descargar($path,$response)
     {
       $path = './models/archivo.csv';  // Reemplaza con la ruta deseada
@@ -132,7 +130,6 @@ class ProductoController extends Producto implements IInterfazAPI
       return $response
         ->withHeader('Content-Type', 'application/json');
     }
-
     public static function Cargar($request, $response, $args)
     {
       $archivoCSV = $request->getUploadedFiles()['csv'];

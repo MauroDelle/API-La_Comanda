@@ -148,7 +148,7 @@ class Pedido implements Ipersistencia
         $query->bindValue(':codigoPedido', $pedido->codigoPedido, PDO::PARAM_STR);
         $query->bindValue(':fotoMesa', $pedido->fotoMesa, PDO::PARAM_STR);
         $query->bindValue(':idMesa', $pedido->idMesa, PDO::PARAM_INT);
-        // $query->bindValue(':idProducto', $pedido->idProducto, PDO::PARAM_INT);
+        $query->bindValue(':idProducto', $pedido->idProducto, PDO::PARAM_INT);
         $query->bindValue(':nombreCliente', $pedido->nombreCliente, PDO::PARAM_STR);
         $query->bindValue(':estado', Estado::PENDIENTE, PDO::PARAM_STR);
         $query->execute();
@@ -207,6 +207,49 @@ class Pedido implements Ipersistencia
 
         return $query->fetchColumn();
     }
+
+    public static function obtenerPendientes()
+    {
+        $objAccesoDatos = DataAccess::getInstance();
+        $consulta = $objAccesoDatos->prepareQuery("SELECT id, codigoPedido, fotoMesa, idMesa, idProducto, nombreCliente, estado, tiempoEstimado, tiempoInicio, tiempoEntregado, fechaBaja FROM pedidos WHERE estado = :valor");
+        $consulta->bindValue(':valor', Estado::PENDIENTE, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
+    }
+
+    public static function iniciar($id, $tiempoEstimado)
+    {
+        $objAccesoDato = DataAccess::getInstance();
+        $consulta = $objAccesoDato->prepareQuery("UPDATE pedidos SET estado = :estado, tiempoEstimado = :tiempoEstimado, tiempoInicio = :tiempoInicio WHERE id = :id");
+        $fecha = new DateTime(date('H:i:s'));
+        $consulta->bindValue(':id', $id, PDO::PARAM_STR);
+        $consulta->bindValue(':estado', Estado::PREPARACION, PDO::PARAM_STR);
+        $consulta->bindValue(':tiempoEstimado', $tiempoEstimado, PDO::PARAM_STR);
+        $consulta->bindValue(':tiempoInicio', date_format($fecha, 'H:i:s'));
+        $consulta->execute();
+    }
+
+    public static function finalizar($id)
+    {
+        $objAccesoDato = DataAccess::getInstance();
+        $consulta = $objAccesoDato->prepareQuery("UPDATE pedidos SET estado = :estado WHERE id = :id");
+        $consulta->bindValue(':id', $id, PDO::PARAM_STR);
+        $consulta->bindValue(':estado', Estado::LISTO, PDO::PARAM_STR);
+        $consulta->execute();
+    }
+
+    public static function entregar($id)
+    {
+        $objAccesoDato = DataAccess::getInstance();
+        $consulta = $objAccesoDato->prepareQuery("UPDATE pedidos SET estado = :estado, tiempoEntregado = :tiempoEntregado WHERE id = :id");
+        $fecha = new DateTime(date('H:i:s'));
+        $consulta->bindValue(':id', $id, PDO::PARAM_STR);
+        $consulta->bindValue(':estado', Estado::ENTREGADO, PDO::PARAM_STR);
+        $consulta->bindValue(':tiempoEntregado', date_format($fecha, 'H:i:s'));
+        $consulta->execute();
+    }
+    
 
 }
 ?>
