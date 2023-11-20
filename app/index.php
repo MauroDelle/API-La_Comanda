@@ -53,10 +53,6 @@ $app->group('/producto', function (RouteCollectorProxy $group) {
     // Rutas para manejar operaciones generales con productos
     $group->post('[/]', \ProductoController::class . '::CargarUno');
     $group->get('[/]', \ProductoController::class . '::TraerTodos');
-
-    // Rutas adicionales
-    $group->post('/load', \ProductoController::class . '::Cargar')->add(\Validador::class . '::VerificarArchivo');
-    $group->get('/download', \ProductoController::class . '::Descargar');
 });
 
 $app->group('/mesa', function (RouteCollectorProxy $group) {
@@ -73,11 +69,19 @@ $app->group('/pedido', function (RouteCollectorProxy $group) {
   $group->get('[/]', \PedidoController::class . '::TraerTodos');
 });
 
+$app->group('/productoCSV', function (RouteCollectorProxy $group) {
+  $group->post('/load', \ProductoController::class . '::Cargar')->add(\Validador::class . '::VerificarArchivo');
+  $group->get('/download', \ProductoController::class . '::Descargar');
+});
+
+$app->group('/csv', function (RouteCollectorProxy $group) {
+
+  $group->get('/download[/]', \ProductoController::class . '::Descargar');
+});
+
 // LOG IN 
 $app->group('/login', function (RouteCollectorProxy $group) {
   $group->post('[/]', \EmpleadoController::class . '::LogIn')->add(\Logger::class . '::ValidarLogin');
 });
-
-
 
 $app->run();

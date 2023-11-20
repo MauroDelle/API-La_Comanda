@@ -1,7 +1,7 @@
 <?php
 require_once './models/Producto.php';
 require_once './interfaces/IInterfazAPI.php';
-
+use Firebase\JWT\JWT;
 class ProductoController extends Producto implements IInterfazAPI
 {
     public static function CargarUno($request,$response,$args)
@@ -110,21 +110,27 @@ class ProductoController extends Producto implements IInterfazAPI
       ->withHeader('Content-Type', 'application/json');
     }
 
-    public static function Descargar($request, $response, $args)
+    public static function Descargar($path,$response)
     {
-      $productos = Producto::obtenerTodos();
+      $path = './models/archivo.csv';  // Reemplaza con la ruta deseada
+
+      $listaProductos = Producto::obtenerTodos();
+      $file = fopen($path, "w");
   
-      $stream = fopen('php://temp', 'w+');
-      foreach ($productos as $p) {
-        fputcsv($stream, get_object_vars($p));
+      foreach($listaProductos as $producto)
+      {
+          $separado = implode(",", (array)$producto);
+          if($file)
+          {
+              fwrite($file, $separado . ",\r\n");
+          }
       }
   
-      $response = $response->withHeader('Content-Type', 'application/csv');
-      $response = $response->withHeader('Pragma', 'no-cache');
-      $response = $response->withHeader('Expires', '0');
-      $response = $response->withBody(new \Slim\Psr7\Stream($stream));
-      echo 'hola';
-      return $response;
+      fclose($file);
+      $payload = json_encode(array("mensaje" => "Archivo cargado con exito"));
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
     }
 
 
