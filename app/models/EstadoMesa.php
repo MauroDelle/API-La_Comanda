@@ -11,6 +11,5 @@ class Estado
     const PREPARACION = 'En Preparacion';
     const LISTO = 'Listo para servir';
     const ENTREGADO = 'Entregado';
-
 }
 ?>

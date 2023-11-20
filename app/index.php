@@ -1,5 +1,6 @@
 <?php
-// Error Handling
+
+#region DEPENDENCIAS
 error_reporting(-1);
 ini_set('display_errors', 1);
 
@@ -15,6 +16,12 @@ require_once './controllers/ProductoController.php';
 require_once './controllers/MesaController.php';
 require_once './controllers/PedidoController.php';
 
+require_once './middlewares/AutentificadorJWT.php';
+require_once './middlewares/Autentificador.php';
+require_once './middlewares/Validador.php';
+require_once './middlewares/Logger.php';
+
+
 // Carga el archivo .env con la configuracion de la BD.
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
@@ -25,20 +32,31 @@ $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
 $app->addBodyParsingMiddleware();
 
+#endregion
+
+
+
 $app->group('/empleado', function (RouteCollectorProxy $group) {
-  $group->post('[/]', \EmpleadoController::class . '::CargarUno');
-  $group->put('/{id}', \EmpleadoController::class . '::ModificarUno');
-  $group->delete('/{id}', \EmpleadoController::class . '::BorrarUno');
-  $group->get('[/]', \EmpleadoController::class . '::TraerTodos');
-  $group->get('/{empleado}', \EmpleadoController::class . '::TraerUno');
+  $group->post('[/]', \EmpleadoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio')->add(\Validador::class . '::ValidarNuevoEmpleado');
+  $group->put('/{id}', \EmpleadoController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->delete('/{id}', \EmpleadoController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('[/]', \EmpleadoController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('/{empleado}', \EmpleadoController::class . '::TraerUno')->add(\Autentificador::class . '::ValidarSocio');
 });
 
 $app->group('/producto', function (RouteCollectorProxy $group) {
-  $group->post('[/]', \ProductoController::class . '::CargarUno');
-  $group->put('/{id}', \ProductoController::class . '::ModificarUno');
-  $group->delete('/{id}', \ProductoController::class . '::BorrarUno');
-  $group->get('[/]', \ProductoController::class . '::TraerTodos');
-  $group->get('/{producto}', \ProductoController::class . '::TraerUno');
+    // Rutas para manejar productos específicos
+    $group->get('/{producto}', \ProductoController::class . '::TraerUno');
+    $group->put('/{id}', \ProductoController::class . '::ModificarUno');
+    $group->delete('/{id}', \ProductoController::class . '::BorrarUno');
+
+    // Rutas para manejar operaciones generales con productos
+    $group->post('[/]', \ProductoController::class . '::CargarUno');
+    $group->get('[/]', \ProductoController::class . '::TraerTodos');
+
+    // Rutas adicionales
+    $group->post('/load', \ProductoController::class . '::Cargar')->add(\Validador::class . '::VerificarArchivo');
+    $group->get('/download', \ProductoController::class . '::Descargar');
 });
 
 $app->group('/mesa', function (RouteCollectorProxy $group) {
@@ -55,6 +73,11 @@ $app->group('/pedido', function (RouteCollectorProxy $group) {
   $group->get('[/]', \PedidoController::class . '::TraerTodos');
 });
 
+// LOG IN 
+$app->group('/login', function (RouteCollectorProxy $group) {
+  $group->post('[/]', \EmpleadoController::class . '::LogIn')->add(\Logger::class . '::ValidarLogin');
+});
+
+
 
 $app->run();
-?>

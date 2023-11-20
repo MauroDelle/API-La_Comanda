@@ -6,8 +6,8 @@ require_once './models/Rol.php';
 class Producto implements Ipersistencia
 {
     public $id;
-    public $sector;
     public $nombre;
+    public $sector;
     public $precio;
     public $tiempo_estimado;
 
@@ -27,6 +27,15 @@ class Producto implements Ipersistencia
     public function getNombre() {
         return $this->nombre;
     }
+
+    public static function GetProductos()
+    {
+        $objAccesoDatos = DataAccess::getInstance();
+        $consulta = $objAccesoDatos->prepareQuery("SELECT * FROM productos");
+        $consulta->execute();
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Producto');
+    }
+
 
     public function getPrecio() {
         return $this->precio;
@@ -121,7 +130,33 @@ class Producto implements Ipersistencia
         return $query->fetchObject('Producto');
     }
 
+    public static function crearLista($lista)
+    {
+        foreach ($lista as $p) {
+            Producto::crear($p);
+        }
+    }
 
+
+    public static function ValidarTipo($tipo)
+    {
+        if ($tipo != Rol::BARTENDER && $tipo != Rol::CERVECERO && $tipo != Rol::COCINERO && $tipo != Rol::MOZO) {
+            return false;
+        }
+        return true;
+    }
+    
+    public static function ValidarSector($sector)
+    {
+        $productos = Producto::obtenerTodos();
+        foreach ($productos as $p) {
+            if ($p->sector == $sector) {
+                return $p;
+            }
+        }
+        return null;
+    }
+   
 
 
 }
