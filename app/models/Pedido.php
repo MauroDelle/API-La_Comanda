@@ -6,18 +6,17 @@ class Pedido implements Ipersistencia
 
     #region ATRIBUTOS
     public $id;
-    public $codigoPedido;
     public $fotoMesa;
     public $idMesa;
     public $idProducto;
     public $nombreCliente;
     public $estado;
+    public $codigoPedido;
     public $tiempoEstimado;
     public $tiempoInicio;
     public $tiempoEntregado;
     public $facturado;
     public $fechaBaja;
-    
     #endregion
 
     #region CONSTRUCTOR
@@ -149,10 +148,12 @@ class Pedido implements Ipersistencia
         $query->bindValue(':codigoPedido', $pedido->codigoPedido, PDO::PARAM_STR);
         $query->bindValue(':fotoMesa', $pedido->fotoMesa, PDO::PARAM_STR);
         $query->bindValue(':idMesa', $pedido->idMesa, PDO::PARAM_INT);
-        $query->bindValue(':idProducto', $pedido->idProducto, PDO::PARAM_INT);
+        // $query->bindValue(':idProducto', $pedido->idProducto, PDO::PARAM_INT);
         $query->bindValue(':nombreCliente', $pedido->nombreCliente, PDO::PARAM_STR);
         $query->bindValue(':estado', Estado::PENDIENTE, PDO::PARAM_STR);
         $query->execute();
+
+
 
         return $objDataAccess->getLastInsertedId();
     }
@@ -206,8 +207,6 @@ class Pedido implements Ipersistencia
 
         return $query->fetchColumn();
     }
-
-
 
 }
 ?>

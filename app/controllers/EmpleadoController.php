@@ -4,6 +4,7 @@ use Slim\Http\Response;
 
 require_once './models/Empleado.php';
 require_once './Interfaces/IInterfazAPI.php';
+require_once './middlewares/AutentificadorJWT.php';
 
 
 class EmpleadoController extends Empleado implements IInterfazAPI
@@ -14,12 +15,14 @@ class EmpleadoController extends Empleado implements IInterfazAPI
         $rol = $params['rol'];
         $nombre = $params['nombre'];
         $baja = $params['baja'];
+        $clave = $params['clave'];
         $fecha = $params['fecha_alta'];
 
         $empleado = new Empleado();
         $empleado->rol = $rol;
         $empleado->nombre = $nombre;
         $empleado->baja = $baja;
+        $empleado->clave = $clave;
         $empleado->fecha_alta = date('Y-m-d H:i:s');
 
         Empleado::crear($empleado);
@@ -101,6 +104,31 @@ class EmpleadoController extends Empleado implements IInterfazAPI
       return $response
         ->withHeader('Content-Type', 'application/json');
     }
+
+    public static function LogIn($request, $response, $args)
+    {
+      $parametros = $request->getParsedBody();
+      $nombre = $parametros['nombre'];
+      $clave = $parametros['clave'];
+  
+      $usuario = Empleado::obtenerUnoPorClave($nombre,$clave);
+
+  
+      $data = array('nombre' => $usuario->nombre, 'rol' => $usuario->rol, 'clave' => $usuario->clave);
+      $creacionToken = AutentificadorJWT::CrearToken($data);
+
+      $response = $response->withHeader('Set-Cookie', 'token=' . $creacionToken['jwt']);
+
+
+      $payload = json_encode(array("mensaje" => "Usuario logueado correctamente", "token" => $creacionToken['jwt']));
+  
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
+
+
 }
 
 

@@ -29,7 +29,8 @@ SET time_zone = "+00:00";
         SECTOR VARCHAR(50) NOT NULL,
         NOMBRE VARCHAR(255) NOT NULL,
         PRECIO DECIMAL(10,2) NOT NULL,
-        TIEMPO_ESTIMADO TIME
+        TIEMPO_ESTIMADO TIME,
+        ADD fecha_baja DATE DEFAULT NULL
     );
 
     /*-- Tabla Facturaciones --*/
