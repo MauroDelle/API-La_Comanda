@@ -22,7 +22,7 @@ class MesaController extends Mesa implements IInterfazAPI
 
     public static function TraerUno($request, $response, $args){
 
-    $valor = $args['Mesa'];
+    $valor = $args['mesa'];
     $mesa = Mesa::obtenerUno($valor);
     $payload = json_encode($mesa);
 

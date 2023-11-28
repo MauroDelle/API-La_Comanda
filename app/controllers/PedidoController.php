@@ -18,11 +18,13 @@ class PedidoController extends Pedido implements IInterfazAPI
       $idMesa = $parametros['idMesa'];
       $idProducto = $parametros['idProducto'];
       $nombreCliente = $parametros['nombreCliente'];
+      $codigoPedido = $parametros['codigoPedido'];
 
       $pedido = new Pedido();
       $pedido->idMesa = $idMesa;
       $pedido->idProducto = $idProducto;
       $pedido->nombreCliente = $nombreCliente;
+      $pedido->codigoPedido = $codigoPedido;
 
     if (isset($uploadedFiles['fotoMesa'])) {
       $targetPath = './img/' . date_format(new DateTime(), 'Y-m-d_H-i-s') . '_' . $nombreCliente . '_Mesa_' . $idMesa . '.jpg';
@@ -30,11 +32,11 @@ class PedidoController extends Pedido implements IInterfazAPI
       $pedido->fotoMesa = $targetPath;
     }
 
-
       $mesa = Mesa::obtenerUno($idMesa);
 
       if ($mesa->estado == Estado::CERRADA) {
         $pedido->codigoPedido = Mesa::CodigoAleatorio(5);
+        var_dump($pedido->codigoPedido);
         $mesa->estado = Estado::ESPERANDO;
         Mesa::modificar($mesa);
       } else {
@@ -49,7 +51,6 @@ class PedidoController extends Pedido implements IInterfazAPI
       return $response
         ->withHeader('Content-Type', 'application/json');
   }
-
 
   public static function TraerUno($request, $response, $args)
   {
@@ -99,4 +100,108 @@ class PedidoController extends Pedido implements IInterfazAPI
     return $response
       ->withHeader('Content-Type', 'application/json');
   }
+
+  public static function IniciarPedido($request, $response, $args)
+  {
+    $parametros = $request->getParsedBody();
+
+    $id = $args['id'];
+
+    $tiempoEstimado = $parametros['tiempoEstimado'];
+    $pedido = Pedido::obtenerUno($id);
+    var_dump($pedido);
+    if ($pedido) {
+      Producto::obtenerUno($pedido->idProducto);
+        Pedido::iniciar($id, $tiempoEstimado);
+        $payload = json_encode(array("mensaje" => "Pedido en Preparacion"));
+    } else {
+      $payload = json_encode(array("mensaje" => "ID no coinciden con ningun Pedido"));
+    }
+
+    $response->getBody()->write($payload);
+    return $response
+      ->withHeader('Content-Type', 'application/json');
+  }
+
+  public static function FinalizarPedido($request, $response, $args)
+  {
+    $parametros = $request->getParsedBody();
+    $id = $args['id'];
+    $pedido = Pedido::obtenerUno($id);
+    var_dump($pedido->estado);
+    if ($pedido && $pedido->estado == "En Preparacion") {
+      Producto::obtenerUno($pedido->idProducto);
+        Pedido::finalizar($id);
+        $payload = json_encode(array("mensaje" => "Pedido Finalizado"));
+    } else {
+      $payload = json_encode(array("mensaje" => "ID no coinciden con ningun Pedido"));
+    }
+
+    $response->getBody()->write($payload);
+    return $response
+      ->withHeader('Content-Type', 'application/json');
+  }
+
+
+  public static function EntregarPedido($request, $response, $args)
+  {
+    $id = $args['id'];
+
+    $pedido = Pedido::obtenerUno($id);
+    if ($pedido) {
+
+      if ($pedido->estado == "Listo para servir") {
+        Pedido::entregar($id);
+        $mesa = Mesa::obtenerUno($pedido->idMesa);
+        $mesa->estado = Estado::COMIENDO;
+        Mesa::modificar($mesa);
+        $payload = json_encode(array("mensaje" => "Pedido entregado"));
+      } else {
+        $payload = json_encode(array("mensaje" => "El pedido no esta listo"));
+      }
+
+    } else {
+      $payload = json_encode(array("mensaje" => "ID no coinciden con ningun Pedido"));
+    }
+
+    $response->getBody()->write($payload);
+    return $response
+      ->withHeader('Content-Type', 'application/json');
+  }
+
+
+  public static function TraerListos($request, $response, $args)
+  {
+    $listaListos = Pedido::obtenerListos();
+
+    $payload = json_encode(array("listaPedidosListos" => $listaListos));
+
+    $response->getBody()->write($payload);
+    return $response
+      ->withHeader('Content-Type', 'application/json');
+  }
+
+  public static function TraerPendientes($request, $response, $args)
+  {
+    $listaPendientes = Pedido::obtenerPendientes();
+    $lista = [];
+    $cookies = $request->getCookieParams();
+    $lista = $listaPendientes;
+
+    foreach ($listaPendientes as $pedido) {
+      if ((Producto::obtenerUno($pedido->idProducto))) {
+        $lista[] = $pedido;
+      }
+    }
+    
+    $payload = json_encode(array("listaPedidosPendientes" => $lista));
+
+    $response->getBody()->write($payload);
+    return $response
+      ->withHeader('Content-Type', 'application/json');
+  }
+
+
+
+
 }

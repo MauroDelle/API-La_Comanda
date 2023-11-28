@@ -250,6 +250,34 @@ class Pedido implements Ipersistencia
         $consulta->execute();
     }
     
+    public static function obtenerListos()
+    {
+        $objAccesoDatos = DataAccess::getInstance();
+        $consulta = $objAccesoDatos->prepareQuery("SELECT id, codigoPedido, fotoMesa, idMesa, idProducto, nombreCliente, estado, tiempoEstimado, tiempoInicio, tiempoEntregado, fechaBaja FROM pedidos WHERE estado = :valor");
+        $consulta->bindValue(':valor', Estado::LISTO, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
+    }
+
+    // public static function obtenerPedidosPorMesa($codigoMesa, $codigoPedido)
+    // {
+    //     $objAccesoDatos = DataAccess::getInstance();
+    //     $consulta = $objAccesoDatos->prepareQuery(
+    //         "SELECT p.nombreCliente, p.estado, p.tiempoEstimado, p.tiempoInicio
+    //         FROM Pedido as p
+    //         INNER JOIN Mesa as m ON p.idMesa = m.id
+    //         INNER JOIN Producto as pr ON p.idProducto = pr.id
+    //         WHERE p.codigoPedido = :codigoPedido AND m.CODIGO_DE_MESA = :codigoMesa"
+    //     );
+    //     $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
+    //     $consulta->bindValue(':codigoMesa', $codigoMesa, PDO::PARAM_STR);
+    //     $consulta->execute();
+    
+    //     return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    // }
+
+
 
 }
 ?>

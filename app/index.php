@@ -41,7 +41,6 @@ $app->group('/login', function (RouteCollectorProxy $group) {
   $group->post('[/]', \EmpleadoController::class . '::LogIn')->add(\Logger::class . '::ValidarLogin');
 });
 
-
 $app->group('/empleado', function (RouteCollectorProxy $group) {
   $group->post('[/]', \EmpleadoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio')->add(\Validador::class . '::ValidarNuevoEmpleado');
   $group->put('/{id}', \EmpleadoController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
@@ -63,13 +62,20 @@ $app->group('/mesa', function (RouteCollectorProxy $group) {
   $group->put('/{id}', \MesaController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->delete('/{id}', \MesaController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->get('[/]', \MesaController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('/{mesa}', \MesaController::class . '::TraerUno')->add(\Autentificador::class . '::ValidarSocio');
 });
 
 $app->group('/pedido', function (RouteCollectorProxy $group) {
   $group->post('[/]', \PedidoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->put('/{id}', \PedidoController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->delete('/{id}', \PedidoController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
-  $group->get('[/]', \PedidoController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('[/]', \PedidoController::class . '::TraerTodos');
+  $group->post('/inicio/{id}', \PedidoController::class . '::IniciarPedido');
+  $group->post('/final/{id}', \PedidoController::class . '::FinalizarPedido');
+  $group->post('/entregar/{id}', \PedidoController::class . '::EntregarPedido');
+  $group->get('/listos', \PedidoController::class . '::TraerListos');
+  $group->get('/pendientes', \PedidoController::class . '::TraerPendientes');
+  // $group->get('/{codigoMesa}-{codigoPedido}', \PedidoController::class . '::TraerPedidosMesa');
 });
 
 $app->group('/productoCSV', function (RouteCollectorProxy $group) {
