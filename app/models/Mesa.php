@@ -84,7 +84,6 @@ class Mesa implements Ipersistencia
         $consulta->bindValue(':estado', Estado::BAJA, PDO::PARAM_STR);
         $consulta->execute();
     }
-
     static function CodigoAleatorio($longitud)
     {
         $caracteresUtilizables = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -96,6 +95,57 @@ class Mesa implements Ipersistencia
         }
         return $codigo;
     }
+
+    public static function obtenerMesaPorCodigoPedido($codigoPedido)
+    {
+        $objAccesoDatos = DataAccess::getInstance();
+        $consulta = $objAccesoDatos->prepareQuery(
+            "SELECT m.id, m.CODIGO_DE_MESA, m.estado
+            FROM mesas as m
+            INNER JOIN pedidos as p ON p.idMesa = m.id
+            WHERE p.codigoPedido = :codigoPedido"
+        );
+        $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
+
+        $consulta->execute();
+
+        return $consulta->fetchObject('Mesa');
+    }
+
+
+    public static function obtenerCuenta($codigoPedido)
+    {
+        $objAccesoDatos = DataAccess::getInstance();
+        $consulta = $objAccesoDatos->prepareQuery(
+            "SELECT p.idMesa , SUM(pr.precio)
+            FROM pedidos as p
+            INNER JOIN productos as pr ON p.idProducto = pr.id
+            WHERE p.codigoPedido = :codigoPedido"
+        );
+        $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
+
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function obtenerUsosMesas()
+    {
+        $objAccesoDatos = DataAccess::getInstance();
+        $consulta = $objAccesoDatos->prepareQuery(
+            "SELECT m.id, COUNT(*) as cantidad
+            FROM pedidos as p
+            INNER JOIN mesas as m ON p.idMesa = m.id"
+        );
+
+
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+
 
 }
 ?>

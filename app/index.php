@@ -58,23 +58,35 @@ $app->group('/producto', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/mesa', function (RouteCollectorProxy $group) {
+  $group->get('[/]', \MesaController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
+  $group->get('/{mesa}', \MesaController::class . '::TraerUno')->add(\Autentificador::class . '::ValidarSocio');
+
+
+  $group->get('/cuenta/{codigoPedido}', \MesaController::class . '::CuentaMesa');
+  $group->get('/cobrar/{codigoPedido}', \MesaController::class . '::CobrarMesa');
+  $group->get('/cerrar/{id}', \MesaController::class . '::CerrarMesa');
+  $group->get('/usos/', \MesaController::class . '::UsosMesa');
+
+
   $group->post('[/]', \MesaController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->put('/{id}', \MesaController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->delete('/{id}', \MesaController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
-  $group->get('[/]', \MesaController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
-  $group->get('/{mesa}', \MesaController::class . '::TraerUno')->add(\Autentificador::class . '::ValidarSocio');
 });
 
 $app->group('/pedido', function (RouteCollectorProxy $group) {
+  
   $group->post('[/]', \PedidoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->put('/{id}', \PedidoController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->delete('/{id}', \PedidoController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->get('[/]', \PedidoController::class . '::TraerTodos');
-  $group->post('/inicio/{id}', \PedidoController::class . '::IniciarPedido');
+
+  $group->post('/inicio/{id}', \PedidoController::class . '::IniciarPedido')->add(\Autentificador::class . '::ValidarSocio');
   $group->post('/final/{id}', \PedidoController::class . '::FinalizarPedido');
   $group->post('/entregar/{id}', \PedidoController::class . '::EntregarPedido');
   $group->get('/listos', \PedidoController::class . '::TraerListos');
   $group->get('/pendientes', \PedidoController::class . '::TraerPendientes');
+
+  
   // $group->get('/{codigoMesa}-{codigoPedido}', \PedidoController::class . '::TraerPedidosMesa');
 });
 

@@ -10,9 +10,16 @@ class Logger
         $nombre = $parametros['nombre'];
         $clave = $parametros['clave'];
         $usuario = Empleado::obtenerUnoPorClave($nombre,$clave);
+        var_dump($usuario);
 
 
         if ($usuario != false) {
+            $acceso = new Acceso();
+            $acceso->idUsuario = $usuario->id;
+            $acceso->fechaHora = date('Y-m-d H:i:s');
+            // Aquí establecemos el tipo de transacción basado en el tipo de usuario
+            $acceso->tipoTransaccion = "Login-" . ucfirst($usuario->rol);
+            Acceso::crear($acceso);
             return $handler->handle($request);
         }
 

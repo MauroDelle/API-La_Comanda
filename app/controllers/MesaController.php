@@ -84,6 +84,79 @@ class MesaController extends Mesa implements IInterfazAPI
       return $response
         ->withHeader('Content-Type', 'application/json');
     }
+
+    public static function CuentaMesa($request, $response, $args)
+    {
+      $codigoPedido = $args['codigoPedido'];
+  
+      $mesa = Mesa::obtenerMesaPorCodigoPedido($codigoPedido);
+      if ($mesa) {
+        $cuenta = Mesa::obtenerCuenta($codigoPedido);
+        $mesa->estado = Estado::PAGANDO;
+        Mesa::modificar($mesa);
+        $payload = json_encode(array("mensaje" => "La cuenta de la mesa " . $cuenta[0]['idMesa'] . " es: $" . $cuenta[0]['SUM(pr.precio)']));
+      } else {
+        $payload = json_encode(array("mensaje" => "Codigo de Pedido no coinciden con ninguna Mesa"));
+      }
+  
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function CobrarMesa($request, $response, $args)
+    {
+      $codigoPedido = $args['codigoPedido'];
+  
+      $mesa = Mesa::obtenerMesaPorCodigoPedido($codigoPedido);
+  
+      if ($mesa && $mesa->estado == Estado::PAGANDO) {
+        $cuenta = Mesa::obtenerCuenta($codigoPedido);
+        $mesa->estado = Estado::PAGADO;
+        Mesa::modificar($mesa);
+        $payload = json_encode(array("mensaje" => "Se cobro de la mesa " . $cuenta[0]['idMesa'] . " es: $" . $cuenta[0]['SUM(pr.precio)']));
+        //$payload = json_encode(array("mensaje" => "La cuenta de la mesa"));
+      } else {
+        $payload = json_encode(array("mensaje" => "Codigo de Pedido no coinciden con ninguna Mesa"));
+      }
+  
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function CerrarMesa($request, $response, $args)
+    {
+      $id = $args['id'];
+  
+      $mesa = Mesa::obtenerUno($id);
+  
+      if ($mesa && $mesa->estado == Estado::PAGADO) {
+        $mesa->estado = Estado::CERRADA;
+        Mesa::modificar($mesa);
+        $payload = json_encode(array("mensaje" => "Mesa cerrada"));
+      } else {
+        $payload = json_encode(array("mensaje" => "La mesa aun no esta paga o no existe"));
+      }
+  
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function UsosMesa($request, $response, $args)
+    {
+      $mesas = Mesa::obtenerUsosMesas();
+  
+      var_dump($mesas);
+  
+      $payload = json_encode(array("mensaje" => $mesas));
+  
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
 }
 
 

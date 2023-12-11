@@ -5,6 +5,7 @@ require_once './models/Producto.php';
 require_once './models/EstadoMesa.php';
 require_once './Interfaces/IInterfazAPI.php';
 require_once './models/PedidoProducto.php';
+require_once './models/Acceso.php';
 
 
 class PedidoController extends Pedido implements IInterfazAPI
@@ -19,6 +20,19 @@ class PedidoController extends Pedido implements IInterfazAPI
       $idProducto = $parametros['idProducto'];
       $nombreCliente = $parametros['nombreCliente'];
       $codigoPedido = $parametros['codigoPedido'];
+
+
+      $header = $request->getHeaderLine(("Authorization"));
+      $token = trim(explode("Bearer", $header)[1]);
+      $data = AutentificadorJWT::ObtenerData($token);
+      $dataClave = Empleado::obtenerUnoPorClave($data->nombre,$data->clave);
+      
+      $acceso = new Acceso();
+      $acceso->idUsuario = $dataClave->id; // Aquí corregí de $data->ID a $data->id
+      $acceso->fechaHora = date('Y-m-d H:i:s');
+      $acceso->tipoTransaccion = "ALTA-PEDIDO";
+      Acceso::crear($acceso);
+
 
       $pedido = new Pedido();
       $pedido->idMesa = $idMesa;
@@ -111,6 +125,19 @@ class PedidoController extends Pedido implements IInterfazAPI
     $pedido = Pedido::obtenerUno($id);
     var_dump($pedido);
     if ($pedido) {
+
+      $header = $request->getHeaderLine(("Authorization"));
+      $token = trim(explode("Bearer", $header)[1]);
+      $data = AutentificadorJWT::ObtenerData($token);
+      $dataClave = Empleado::obtenerUnoPorClave($data->nombre,$data->clave);
+      
+      $acceso = new Acceso();
+      $acceso->idUsuario = $dataClave->id; // Aquí corregí de $data->ID a $data->id
+      $acceso->fechaHora = date('Y-m-d H:i:s');
+      $acceso->tipoTransaccion = "INICIO-PEDIDO";
+      Acceso::crear($acceso);
+
+
       Producto::obtenerUno($pedido->idProducto);
         Pedido::iniciar($id, $tiempoEstimado);
         $payload = json_encode(array("mensaje" => "Pedido en Preparacion"));
@@ -130,6 +157,20 @@ class PedidoController extends Pedido implements IInterfazAPI
     $pedido = Pedido::obtenerUno($id);
     var_dump($pedido->estado);
     if ($pedido && $pedido->estado == "En Preparacion") {
+
+      $header = $request->getHeaderLine(("Authorization"));
+      $token = trim(explode("Bearer", $header)[1]);
+      $data = AutentificadorJWT::ObtenerData($token);
+      $dataClave = Empleado::obtenerUnoPorClave($data->nombre,$data->clave);
+      
+      $acceso = new Acceso();
+      $acceso->idUsuario = $dataClave->id; // Aquí corregí de $data->ID a $data->id
+      $acceso->fechaHora = date('Y-m-d H:i:s');
+      $acceso->tipoTransaccion = "FINALIZAR-PEDIDO";
+      Acceso::crear($acceso);
+
+
+
       Producto::obtenerUno($pedido->idProducto);
         Pedido::finalizar($id);
         $payload = json_encode(array("mensaje" => "Pedido Finalizado"));
@@ -149,8 +190,19 @@ class PedidoController extends Pedido implements IInterfazAPI
 
     $pedido = Pedido::obtenerUno($id);
     if ($pedido) {
-
       if ($pedido->estado == "Listo para servir") {
+
+        $header = $request->getHeaderLine(("Authorization"));
+        $token = trim(explode("Bearer", $header)[1]);
+        $data = AutentificadorJWT::ObtenerData($token);
+        $dataClave = Empleado::obtenerUnoPorClave($data->nombre,$data->clave);
+        
+        $acceso = new Acceso();
+        $acceso->idUsuario = $dataClave->id; // Aquí corregí de $data->ID a $data->id
+        $acceso->fechaHora = date('Y-m-d H:i:s');
+        $acceso->tipoTransaccion = "ENTREGAR-PEDIDO";
+        Acceso::crear($acceso);
+
         Pedido::entregar($id);
         $mesa = Mesa::obtenerUno($pedido->idMesa);
         $mesa->estado = Estado::COMIENDO;
