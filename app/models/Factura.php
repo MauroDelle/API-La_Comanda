@@ -47,17 +47,19 @@ class Factura
         #endregion
 
 
-    public static function Create($obj){
-
-        $objAccesoDatos = DataAccess::getInstance();
-        $consulta = $objAccesoDatos->prepareQuery("INSERT INTO Facturas (CODIGO_MESA, CODIGO_PEDIDO, FECHA, TOTAL) VALUES (:codigo_mesa, :codigo_pedido, :fecha, :total)");
+        public static function crear($factura)
+        {
+            $objDataAccess = DataAccess::getInstance();
+            $consulta = $objDataAccess->prepareQuery("INSERT INTO Facturas (CODIGO_MESA, CODIGO_PEDIDO, FECHA, TOTAL) VALUES (:codigo_mesa, :codigo_pedido, :fecha, :total)");
+            
+            $consulta->bindValue(':codigo_mesa', $factura->codigo_mesa, PDO::PARAM_INT);
+            $consulta->bindValue(':codigo_pedido', $factura->codigo_pedido, PDO::PARAM_INT);
+            $consulta->bindValue(':fecha', $factura->fecha);
+            $consulta->bindValue(':total', $factura->total);
+            $consulta->execute();
         
-        $consulta->bindValue(':codigo_mesa', $obj->getCodigoMesa(), PDO::PARAM_STR);
-        $consulta->bindValue(':codigo_pedido', $obj->getCodigoPedido(), PDO::PARAM_STR);
-        $consulta->bindValue(':fecha', $obj->getFecha());
-        $consulta->bindValue(':total', $obj->getTotal());
-        $consulta->execute();
-    }
+            return $objDataAccess->getLastInsertedId();
+        }
 
     public static function GetAll(){
         $objAccesoDatos = DataAccess::getInstance();

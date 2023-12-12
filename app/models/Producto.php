@@ -157,7 +157,23 @@ class Producto implements Ipersistencia
         return null;
     }
    
+    public static function obtenerPrecioPorId($idProducto)
+    {
+        $objDataAccess = DataAccess::getInstance();
+        $query = $objDataAccess->prepareQuery("SELECT precio FROM productos WHERE id = :idProducto");
+        $query->bindValue(':idProducto', $idProducto, PDO::PARAM_INT);
+        $query->execute();
 
+        $resultado = $query->fetch(PDO::FETCH_ASSOC);
+
+        // Verificar si se encontró el producto y devolver el precio
+        if ($resultado && isset($resultado['precio'])) {
+            return $resultado['precio'];
+        }
+
+        // En caso de no encontrar el producto o el precio es nulo
+        return null;
+    }
 
 }
 

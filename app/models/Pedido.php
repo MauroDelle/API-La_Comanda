@@ -260,22 +260,34 @@ class Pedido implements Ipersistencia
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Pedido');
     }
 
-    // public static function obtenerPedidosPorMesa($codigoMesa, $codigoPedido)
+
+
+    // public static function obtenerPedidosPorCodigo($codigoPedido)
     // {
     //     $objAccesoDatos = DataAccess::getInstance();
     //     $consulta = $objAccesoDatos->prepareQuery(
     //         "SELECT p.nombreCliente, p.estado, p.tiempoEstimado, p.tiempoInicio
-    //         FROM Pedido as p
+    //         FROM pedidos as p
     //         INNER JOIN Mesa as m ON p.idMesa = m.id
     //         INNER JOIN Producto as pr ON p.idProducto = pr.id
-    //         WHERE p.codigoPedido = :codigoPedido AND m.CODIGO_DE_MESA = :codigoMesa"
+    //         WHERE p.codigoPedido = :codigoPedido"
     //     );
     //     $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
-    //     $consulta->bindValue(':codigoMesa', $codigoMesa, PDO::PARAM_STR);
     //     $consulta->execute();
     
     //     return $consulta->fetchAll(PDO::FETCH_ASSOC);
     // }
+
+    public static function obtenerTodosPorCodigo($codigoPedido)
+    {
+        $objDataAccess = DataAccess::getInstance();
+        $query = $objDataAccess->prepareQuery("SELECT id, idMesa, idProducto, nombreCliente, estado, codigoPedido FROM pedidos WHERE codigoPedido = :codigoPedido");
+        $query->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
+        $query->execute();
+    
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 
 
