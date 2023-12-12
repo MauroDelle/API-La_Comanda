@@ -254,6 +254,49 @@ class PedidoController extends Pedido implements IInterfazAPI
   }
 
 
+public static function obtenerLoMasVendido($request, $response, $args)
+{
+  $listaListos = Pedido::loMasVendido();
+
+  $payload = json_encode(array("listaPedidosListos" => $listaListos));
+
+  $response->getBody()->write($payload);
+  return $response
+    ->withHeader('Content-Type', 'application/json');
+}
+
+public static function LoMenosVendido($request, $response, $args)
+{
+  $listaListos = Pedido::obtenerLoMenosVendido();
+
+  $payload = json_encode(array("lista Pedidos Menos Vendidos" => $listaListos));
+
+  $response->getBody()->write($payload);
+  return $response
+    ->withHeader('Content-Type', 'application/json');
+}
+
+public static function PedidosCancelados($request, $response, $args)
+{
+  $listaListos = Pedido::obtenerPedidosCancelados();
+
+  $payload = json_encode(array("lista Pedidos Cancelados" => $listaListos));
+
+  $response->getBody()->write($payload);
+  return $response
+    ->withHeader('Content-Type', 'application/json');
+}
+
+public static function LaMasUsada($request, $response, $args)
+{
+  $listaListos = Pedido::obtenerMesaMasUsada();
+
+  $payload = json_encode(array("Mesa con mas cantidad de Pedidos registrados: " => $listaListos));
+
+  $response->getBody()->write($payload);
+  return $response
+    ->withHeader('Content-Type', 'application/json');
+}
 
 
 }

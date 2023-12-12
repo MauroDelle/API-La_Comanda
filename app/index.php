@@ -17,6 +17,7 @@ require_once './controllers/MesaController.php';
 require_once './controllers/PedidoController.php';
 require_once './controllers/FacturaController.php';
 require_once './controllers/EncuestaController.php';
+require_once './controllers/AccesoController.php';
 
 require_once './middlewares/AutentificadorJWT.php';
 require_once './middlewares/Autentificador.php';
@@ -68,6 +69,7 @@ $app->group('/mesa', function (RouteCollectorProxy $group) {
   $group->get('/cobrar/{codigoPedido}', \MesaController::class . '::CobrarMesa');
   $group->get('/cerrar/{id}', \MesaController::class . '::CerrarMesa');
   $group->get('/usos/', \MesaController::class . '::UsosMesa');
+  $group->get('/estadisticas/masUsada', \PedidoController::class . '::LaMasUsada');
 
 
   $group->post('[/]', \MesaController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
@@ -88,15 +90,21 @@ $app->group('/pedido', function (RouteCollectorProxy $group) {
   $group->get('/listos', \PedidoController::class . '::TraerListos');
   $group->get('/pendientes', \PedidoController::class . '::TraerPendientes');
 
+  $group->get('/estadisticas/masVendido', \PedidoController::class . '::obtenerLoMasVendido');
+  $group->get('/estadisticas/menosVendido', \PedidoController::class . '::LoMenosVendido');
+  $group->get('/estadisticas/cancelados', \PedidoController::class . '::PedidosCancelados');
   
-  // $group->get('/{codigoMesa}-{codigoPedido}', \PedidoController::class . '::TraerPedidosMesa');
+});
+
+
+$app->group('/exportarPDF', function (RouteCollectorProxy $group) {
+  $group->get('/{orden}', \AccesoController::class . ':ExportarOperacionesPDF');
 });
 
 $app->group('/productoCSV', function (RouteCollectorProxy $group) {
   $group->post('/load', \ProductoController::class . '::Cargar');
   $group->get('/download', \ProductoController::class . '::Descargar');
 });
-
 
 $app->group('/factura', function (RouteCollectorProxy $group) {
   $group->post('[/]', \FacturaController::class . '::CargarUno');

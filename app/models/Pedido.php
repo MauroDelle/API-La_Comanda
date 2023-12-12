@@ -261,22 +261,48 @@ class Pedido implements Ipersistencia
     }
 
 
-
-    // public static function obtenerPedidosPorCodigo($codigoPedido)
-    // {
-    //     $objAccesoDatos = DataAccess::getInstance();
-    //     $consulta = $objAccesoDatos->prepareQuery(
-    //         "SELECT p.nombreCliente, p.estado, p.tiempoEstimado, p.tiempoInicio
-    //         FROM pedidos as p
-    //         INNER JOIN Mesa as m ON p.idMesa = m.id
-    //         INNER JOIN Producto as pr ON p.idProducto = pr.id
-    //         WHERE p.codigoPedido = :codigoPedido"
-    //     );
-    //     $consulta->bindValue(':codigoPedido', $codigoPedido, PDO::PARAM_STR);
-    //     $consulta->execute();
+    public static function loMasVendido()
+    {
+        $objDataAccess = DataAccess::getInstance();
+        $consulta = $objDataAccess->prepareQuery("
+            SELECT idProducto, COUNT(idProducto) AS cantidadVendida
+            FROM Pedidos
+            WHERE estado = 'Entregado'
+            GROUP BY idProducto
+            ORDER BY cantidadVendida DESC
+        ");
+        $consulta->execute();
     
-    //     return $consulta->fetchAll(PDO::FETCH_ASSOC);
-    // }
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function obtenerLoMenosVendido()
+{
+    $objDataAccess = DataAccess::getInstance();
+    $consulta = $objDataAccess->prepareQuery("
+        SELECT idProducto, COUNT(*) as cantidadVendida
+        FROM pedidos
+        GROUP BY idProducto
+        ORDER BY cantidadVendida ASC
+        LIMIT 5
+    ");
+    $consulta->execute();
+
+    return $consulta->fetchAll(PDO::FETCH_ASSOC);
+}
+
+    public static function obtenerPedidosCancelados()
+    {
+        $objDataAccess = DataAccess::getInstance();
+        $consulta = $objDataAccess->prepareQuery("
+            SELECT *
+            FROM pedidos
+            WHERE estado = 'Cancelado'
+        ");
+        $consulta->execute();
+
+        return $consulta->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public static function obtenerTodosPorCodigo($codigoPedido)
     {
@@ -288,6 +314,21 @@ class Pedido implements Ipersistencia
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+    public static function obtenerMesaMasUsada()
+{
+    $objDataAccess = DataAccess::getInstance();
+    $consulta = $objDataAccess->prepareQuery("
+        SELECT idMesa, COUNT(idMesa) as cantidadPedidos
+        FROM pedidos
+        GROUP BY idMesa
+        ORDER BY cantidadPedidos DESC
+        LIMIT 1
+    ");
+    $consulta->execute();
+
+    return $consulta->fetch(PDO::FETCH_ASSOC);
+}
 
 
 

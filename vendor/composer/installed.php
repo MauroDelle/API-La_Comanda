@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '17af619c0eb6acaa70090a735aa9afbee6743cf7',
+        'reference' => '181a916cd0f6055fe21efba4a13485861fc9808a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,9 +13,18 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '17af619c0eb6acaa70090a735aa9afbee6743cf7',
+            'reference' => '181a916cd0f6055fe21efba4a13485861fc9808a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'extcode/tcpdf' => array(
+            'pretty_version' => 'v0.4.0',
+            'version' => '0.4.0.0',
+            'reference' => '9685ca75cd774282b395c8dbc7207c6bfd3ab23e',
+            'type' => 'typo3-cms-extension',
+            'install_path' => __DIR__ . '/../extcode/tcpdf',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -37,6 +46,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'fpdf/fpdf' => array(
+            'pretty_version' => '1.86.0',
+            'version' => '1.86.0.0',
+            'reference' => 'd2a0cbd9e4b5557b9c6c29ddc8eb2b36d8761e00',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../fpdf/fpdf',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'graham-campbell/result-type' => array(
             'pretty_version' => 'v1.1.2',
             'version' => '1.1.2.0',
@@ -45,6 +63,18 @@
             'install_path' => __DIR__ . '/../graham-campbell/result-type',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'lw/typo3cms-installers' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '*',
+            ),
+        ),
+        'netresearch/composer-installers' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '*',
+            ),
         ),
         'nikic/fast-route' => array(
             'pretty_version' => 'v1.3.0',
@@ -139,6 +169,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'setasign/fpdf' => array(
+            'pretty_version' => '1.8.2',
+            'version' => '1.8.2.0',
+            'reference' => 'd77904018090c17dc9f3ab6e944679a7a47e710a',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../setasign/fpdf',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'slim/psr7' => array(
             'pretty_version' => '1.6.1',
             'version' => '1.6.1.0',
@@ -183,6 +222,372 @@
             'install_path' => __DIR__ . '/../symfony/polyfill-php80',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'tcpdf' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '*',
+            ),
+        ),
+        'typo3/cms' => array(
+            'pretty_version' => '6.2.1',
+            'version' => '6.2.1.0',
+            'reference' => '4707e4237e657b5bf9b24d667abc955459bf01f4',
+            'type' => 'typo3-cms-core',
+            'install_path' => __DIR__ . '/../typo3/cms',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'typo3/cms-about' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-aboutmodules' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-adodb' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-backend' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-belog' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-beuser' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-cms' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-composer-installers' => array(
+            'pretty_version' => 'v5.0.0',
+            'version' => '5.0.0.0',
+            'reference' => '71356484e6ccadf45acdde6489823c7af925b144',
+            'type' => 'composer-plugin',
+            'install_path' => __DIR__ . '/../typo3/cms-composer-installers',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'typo3/cms-context-help' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-core' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-cshmanual' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-css-styled-content' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-dbal' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-documentation' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-extbase' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-extensionmanager' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-extra-page-cm-options' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-feedit' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-felogin' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-filelist' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-filemetadata' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-fluid' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-form' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-frontend' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-func' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-func-wizards' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-impexp' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-indexed-search' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-indexed-search-mysql' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-info' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-info-pagetsconfig' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-install' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-lang' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-linkvalidator' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-lowlevel' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-opendocs' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-openid' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-perm' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-recordlist' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-recycler' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-reports' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-rsaauth' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-rtehtmlarea' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-saltedpasswords' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-scheduler' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-setup' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-sv' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-sys-action' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-sys-note' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-t3editor' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-t3skin' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-taskcenter' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-tstemplate' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-version' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-viewpage' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-wizard-crpages' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-wizard-sortpages' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
+        ),
+        'typo3/cms-workspaces' => array(
+            'dev_requirement' => false,
+            'replaced' => array(
+                0 => '6.2.1',
+            ),
         ),
         'vlucas/phpdotenv' => array(
             'pretty_version' => 'v5.6.0',
