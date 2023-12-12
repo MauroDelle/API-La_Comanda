@@ -74,6 +74,7 @@ $app->group('/mesa', function (RouteCollectorProxy $group) {
   $group->get('/estadisticas/menosFacturada', \MesaController::class . '::MesaMenosFacturada');
   $group->get('/estadisticas/mayorImporteFacturado', \MesaController::class . '::MesaMayorImporteFacturado');
   $group->get('/estadisticas/menorImporteFacturado', \MesaController::class . '::MesaMenorImporteFacturado');
+  $group->post('/estadisticas/facturacionEntreFechas', \FacturaController::class . '::facturacionEntreFechas');
 
   $group->post('[/]', \MesaController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->put('/{id}', \MesaController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
