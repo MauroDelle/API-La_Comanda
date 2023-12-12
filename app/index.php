@@ -16,6 +16,7 @@ require_once './controllers/ProductoController.php';
 require_once './controllers/MesaController.php';
 require_once './controllers/PedidoController.php';
 require_once './controllers/FacturaController.php';
+require_once './controllers/EncuestaController.php';
 
 require_once './middlewares/AutentificadorJWT.php';
 require_once './middlewares/Autentificador.php';
@@ -100,6 +101,12 @@ $app->group('/productoCSV', function (RouteCollectorProxy $group) {
 $app->group('/factura', function (RouteCollectorProxy $group) {
   $group->post('[/]', \FacturaController::class . '::CargarUno');
 });
+
+$app->group('/encuesta', function (RouteCollectorProxy $group) {
+  $group->post('[/]', \EncuestaController::class . '::CargarUno');
+  $group->get('/mejores', \EncuestaController::class . '::TraerMejores');
+});
+
 
 
 #endregion

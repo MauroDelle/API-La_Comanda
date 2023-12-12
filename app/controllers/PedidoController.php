@@ -19,7 +19,7 @@ class PedidoController extends Pedido implements IInterfazAPI
       $idMesa = $parametros['idMesa'];
       $idProducto = $parametros['idProducto'];
       $nombreCliente = $parametros['nombreCliente'];
-      $codigoPedido = $parametros['codigoPedido'];
+       $codigoPedido = $parametros['codigoPedido'];
 
 
       $header = $request->getHeaderLine(("Authorization"));
@@ -38,7 +38,7 @@ class PedidoController extends Pedido implements IInterfazAPI
       $pedido->idMesa = $idMesa;
       $pedido->idProducto = $idProducto;
       $pedido->nombreCliente = $nombreCliente;
-      $pedido->codigoPedido = $codigoPedido;
+       $pedido->codigoPedido = $codigoPedido;
 
     if (isset($uploadedFiles['fotoMesa'])) {
       $targetPath = './img/' . date_format(new DateTime(), 'Y-m-d_H-i-s') . '_' . $nombreCliente . '_Mesa_' . $idMesa . '.jpg';

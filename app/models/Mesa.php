@@ -144,6 +144,15 @@ class Mesa implements Ipersistencia
         return $consulta->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function obtenerUnoPorCodigo($valor)
+    {
+        $objAccesoDatos = DataAccess::getInstance();
+        $consulta = $objAccesoDatos->prepareQuery("SELECT id, CODIGO_DE_MESA, estado FROM mesas WHERE CODIGO_DE_MESA = :valor");
+        $consulta->bindValue(':valor', $valor, PDO::PARAM_STR);
+        $consulta->execute();
+
+        return $consulta->fetchObject('Mesa');
+    }
 
 
 

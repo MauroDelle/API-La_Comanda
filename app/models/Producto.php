@@ -137,7 +137,6 @@ class Producto implements Ipersistencia
         }
     }
 
-
     public static function ValidarTipo($tipo)
     {
         if ($tipo != Rol::BARTENDER && $tipo != Rol::CERVECERO && $tipo != Rol::COCINERO && $tipo != Rol::MOZO) {
