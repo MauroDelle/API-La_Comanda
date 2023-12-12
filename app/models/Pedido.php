@@ -330,6 +330,21 @@ class Pedido implements Ipersistencia
     return $consulta->fetch(PDO::FETCH_ASSOC);
 }
 
+public static function obtenerMesaMenosUsada()
+{
+    $objDataAccess = DataAccess::getInstance();
+    $consulta = $objDataAccess->prepareQuery("
+        SELECT idMesa, COUNT(idMesa) as cantidadPedidos
+        FROM pedidos
+        GROUP BY idMesa
+        ORDER BY cantidadPedidos ASC
+        LIMIT 1
+    ");
+    $consulta->execute();
+
+    return $consulta->fetch(PDO::FETCH_ASSOC);
+}
+
 
 
 }

@@ -50,6 +50,16 @@ class AccesoController extends Acceso implements IInterfazAPI
     {
         
         $orden = $args['orden'];
+        $header = $request->getHeaderLine(("Authorization"));
+        $token = trim(explode("Bearer", $header)[1]);
+        $data = AutentificadorJWT::ObtenerData($token);
+        $dataClave = Empleado::obtenerUnoPorClave($data->nombre,$data->clave);
+        
+        $acceso = new Acceso();
+        $acceso->idUsuario = $dataClave->id; // Aquí corregí de $data->ID a $data->id
+        $acceso->fechaHora = date('Y-m-d H:i:s');
+        $acceso->tipoTransaccion = "EXPORT-PDF";
+        Acceso::crear($acceso);
 
         try
         {

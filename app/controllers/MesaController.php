@@ -157,6 +157,53 @@ class MesaController extends Mesa implements IInterfazAPI
         ->withHeader('Content-Type', 'application/json');
     }
 
+
+    public static function MesaMasFacturada($request, $response, $args)
+    {
+      $listaListos = Mesa::obtenerMesaMasFacturo();
+
+      $payload = json_encode(array("La mesa que mas facturo fue: " => $listaListos));
+
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function MesaMenosFacturada($request, $response, $args)
+    {
+      $listaListos = Mesa::obtenerMesaMenosFacturo();
+
+      $payload = json_encode(array("La mesa que menos facturo fue: " => $listaListos));
+
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function MesaMayorImporteFacturado($request, $response, $args)
+    {
+      $listaListos = Mesa::obtenerMesaMayorImporteFacturado();
+
+      $payload = json_encode(array("La mesa con el mayor importe facturado fue: " => $listaListos));
+
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
+    public static function MesaMenorImporteFacturado($request, $response, $args)
+    {
+      $listaListos = Mesa::obtenerMesaMenorImporteFacturado();
+
+      $payload = json_encode(array("La mesa con el menor importe facturado fue: " => $listaListos));
+
+      $response->getBody()->write($payload);
+      return $response
+        ->withHeader('Content-Type', 'application/json');
+    }
+
+
+
 }
 
 

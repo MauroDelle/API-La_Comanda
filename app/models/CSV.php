@@ -25,7 +25,6 @@ public static function ExportarPDF($path, $orden)
 {
     // Obtén todos los logs
     $listaTransacciones = Acceso::obtenerTodos();
-    var_dump($listaTransacciones);
 
     // Ordena los logs si se especificó un orden
     if ($orden == 'ascendente') {

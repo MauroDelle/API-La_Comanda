@@ -64,13 +64,16 @@ $app->group('/mesa', function (RouteCollectorProxy $group) {
   $group->get('[/]', \MesaController::class . '::TraerTodos')->add(\Autentificador::class . '::ValidarSocio');
   $group->get('/{mesa}', \MesaController::class . '::TraerUno')->add(\Autentificador::class . '::ValidarSocio');
 
-
   $group->get('/cuenta/{codigoPedido}', \MesaController::class . '::CuentaMesa');
   $group->get('/cobrar/{codigoPedido}', \MesaController::class . '::CobrarMesa');
   $group->get('/cerrar/{id}', \MesaController::class . '::CerrarMesa');
   $group->get('/usos/', \MesaController::class . '::UsosMesa');
   $group->get('/estadisticas/masUsada', \PedidoController::class . '::LaMasUsada');
-
+  $group->get('/estadisticas/menosUsada', \PedidoController::class . '::LaMenosUsada');
+  $group->get('/estadisticas/masFacturada', \MesaController::class . '::MesaMasFacturada');
+  $group->get('/estadisticas/menosFacturada', \MesaController::class . '::MesaMenosFacturada');
+  $group->get('/estadisticas/mayorImporteFacturado', \MesaController::class . '::MesaMayorImporteFacturado');
+  $group->get('/estadisticas/menorImporteFacturado', \MesaController::class . '::MesaMenorImporteFacturado');
 
   $group->post('[/]', \MesaController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->put('/{id}', \MesaController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
@@ -78,17 +81,18 @@ $app->group('/mesa', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/pedido', function (RouteCollectorProxy $group) {
-  
-  $group->post('[/]', \PedidoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->put('/{id}', \PedidoController::class . '::ModificarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->delete('/{id}', \PedidoController::class . '::BorrarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->get('[/]', \PedidoController::class . '::TraerTodos');
 
-  $group->post('/inicio/{id}', \PedidoController::class . '::IniciarPedido')->add(\Autentificador::class . '::ValidarSocio');
-  $group->post('/final/{id}', \PedidoController::class . '::FinalizarPedido');
-  $group->post('/entregar/{id}', \PedidoController::class . '::EntregarPedido');
-  $group->get('/listos', \PedidoController::class . '::TraerListos');
-  $group->get('/pendientes', \PedidoController::class . '::TraerPendientes');
+  
+  $group->post('[/]', \PedidoController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarMozo');
+  $group->post('/inicio/{id}', \PedidoController::class . '::IniciarPedido')->add(\Autentificador::class . '::ValidarCocinero');
+  $group->post('/final/{id}', \PedidoController::class . '::FinalizarPedido')->add(\Autentificador::class . '::ValidarCocinero');
+  $group->post('/entregar/{id}', \PedidoController::class . '::EntregarPedido')->add(\Autentificador::class . '::ValidarMozo');
+  $group->get('/listos', \PedidoController::class . '::TraerListos')->add(\Autentificador::class . '::ValidarMozo');
+  $group->get('/pendientes', \PedidoController::class . '::TraerPendientes')->add(\Autentificador::class . '::ValidarMozo');
+
 
   $group->get('/estadisticas/masVendido', \PedidoController::class . '::obtenerLoMasVendido');
   $group->get('/estadisticas/menosVendido', \PedidoController::class . '::LoMenosVendido');
@@ -98,7 +102,7 @@ $app->group('/pedido', function (RouteCollectorProxy $group) {
 
 
 $app->group('/exportarPDF', function (RouteCollectorProxy $group) {
-  $group->get('/{orden}', \AccesoController::class . ':ExportarOperacionesPDF');
+  $group->get('/{orden}', \AccesoController::class . ':ExportarOperacionesPDF')->add(\Autentificador::class . '::ValidarSocio');
 });
 
 $app->group('/productoCSV', function (RouteCollectorProxy $group) {
@@ -111,7 +115,7 @@ $app->group('/factura', function (RouteCollectorProxy $group) {
 });
 
 $app->group('/encuesta', function (RouteCollectorProxy $group) {
-  $group->post('[/]', \EncuestaController::class . '::CargarUno');
+  $group->post('[/]', \EncuestaController::class . '::CargarUno')->add(\Autentificador::class . '::ValidarSocio');
   $group->get('/mejores', \EncuestaController::class . '::TraerMejores');
 });
 

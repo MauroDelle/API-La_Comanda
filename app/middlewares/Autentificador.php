@@ -31,33 +31,46 @@ class Autentificador
 
     public static function ValidarMozo($request, $handler)
     {
-        $cookies = $request->getCookieParams();
         $header = $request->getHeaderLine(("Authorization"));
         $token = trim(explode("Bearer", $header)[1]);
+        $response = new Response();
 
-        AutentificadorJWT::VerificarToken($token);
-        $payload = AutentificadorJWT::ObtenerData($token);
+            try {
+                //AutentificadorJWT::VerificarToken($token);
+                $payload = AutentificadorJWT::ObtenerData($token);
+                if ($payload->rol == 'mozo') {
+                    return $handler->handle($request);
+                }
+                else{
+                    $response->getBody()->write(json_encode(array('Error' => "ACCION NO PERMITIDA, SOLAMENTE PARA MOZOS")));
+                }
+            } catch (Exception $e) {
+                $response->getBody()->write(json_encode(array("Error" => $e->getMessage())));
+            }
 
-        if ($payload->rol == 'socio' || $payload->rol == 'mozo') {
-            return $handler->handle($request);
-        }
-
-        throw new Exception("Token no valido");
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
-    public static function ValidarPreparador($request, $handler)
+    public static function ValidarCocinero($request, $handler)
     {
-        $cookies = $request->getCookieParams();
         $header = $request->getHeaderLine(("Authorization"));
         $token = trim(explode("Bearer", $header)[1]);
-        AutentificadorJWT::VerificarToken($token);
-        $payload = AutentificadorJWT::ObtenerData($token);
+        $response = new Response();
 
-        if ($payload->rol == 'socio' || $payload->rol == 'cocinero' || $payload->rol == 'cervecero' || $payload->rol == 'bartender') {
-            return $handler->handle($request);
-        }
+            try {
+                //AutentificadorJWT::VerificarToken($token);
+                $payload = AutentificadorJWT::ObtenerData($token);
+                if ($payload->rol == 'cocinero') {
+                    return $handler->handle($request);
+                }
+                else{
+                    $response->getBody()->write(json_encode(array('Error' => "ACCION NO PERMITIDA, SOLAMENTE PARA COCINEROS")));
+                }
+            } catch (Exception $e) {
+                $response->getBody()->write(json_encode(array("Error" => $e->getMessage())));
+            }
 
-        throw new Exception("Token no valido");
+        return $response->withHeader('Content-Type', 'application/json');
     }
 
 

@@ -299,4 +299,16 @@ public static function LaMasUsada($request, $response, $args)
 }
 
 
+public static function LaMenosUsada($request, $response, $args)
+{
+  $listaListos = Pedido::obtenerMesaMenosUsada();
+
+  $payload = json_encode(array("Mesa con menor cantidad de pedidos fue: " => $listaListos));
+
+  $response->getBody()->write($payload);
+  return $response
+    ->withHeader('Content-Type', 'application/json');
+}
+
+
 }
