@@ -53,8 +53,6 @@ class FacturaController extends Factura
         return $response->withHeader("Content-Type", "application/json");
     }
 
-
-
     public static function facturacionEntreFechas($request, $response, $args)
     {
         // Obtener las fechas de la solicitud

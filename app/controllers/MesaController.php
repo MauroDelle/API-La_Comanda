@@ -104,18 +104,18 @@ class MesaController extends Mesa implements IInterfazAPI
         ->withHeader('Content-Type', 'application/json');
     }
 
+    
+
     public static function CobrarMesa($request, $response, $args)
     {
       $codigoPedido = $args['codigoPedido'];
   
       $mesa = Mesa::obtenerMesaPorCodigoPedido($codigoPedido);
-  
-      if ($mesa && $mesa->estado == Estado::PAGANDO) {
+      if ($mesa) {
         $cuenta = Mesa::obtenerCuenta($codigoPedido);
         $mesa->estado = Estado::PAGADO;
         Mesa::modificar($mesa);
         $payload = json_encode(array("mensaje" => "Se cobro de la mesa " . $cuenta[0]['idMesa'] . " es: $" . $cuenta[0]['SUM(pr.precio)']));
-        //$payload = json_encode(array("mensaje" => "La cuenta de la mesa"));
       } else {
         $payload = json_encode(array("mensaje" => "Codigo de Pedido no coinciden con ninguna Mesa"));
       }
